@@ -1,7 +1,7 @@
 import { Locator, Page, expect } from "@playwright/test";
 import * as dotenv from "dotenv";
-import { LoginData } from "../utils/logindata";
-import { BasePage } from "./basepage";
+import { LoginData } from "../utils/LoginData";
+import { BasePage } from "./BasePage";
 
 dotenv.config();
 
@@ -12,40 +12,41 @@ export class LoginPage extends BasePage {
     this.baseUrl = process.env.BASE_URL;
   }
 
-  async navigateToLogin() {
+  async goToLogin() {
     await this.page.goto(this.baseUrl);
   }
 
-  async loginWithValidCredentials() {
-    await this.locatoremailAddress.fill(LoginData.login.emailaddress);
-    await this.locatorpassword.fill(LoginData.login.password);
-    await this.locatorcontinueButton.click();
+  async loginWithValidCreds() {
+    await this.emailAddressLocator.fill(LoginData.login.emailaddress);
+    await this.passwordLocator.fill(LoginData.login.password);
+    await this.continueButtonLocator.click();
+    await this.page.waitForLoadState('load')
     await expect(
       this.page.getByRole("heading", { name: "Projects" })
     ).toBeVisible();
   }
 
-  async validateErrorByDirectlyClickingOnSubmitButton() {
-    await this.locatorcontinueButton.click();
-    await expect(this.locatoremailAddress).toHaveJSProperty(
+  async validateErrorOnSubmit() {
+    await this.continueButtonLocator.click();
+    await expect(this.emailAddressLocator).toHaveJSProperty(
       "validationMessage",
       "Please fill in this field."
     );
   }
 
-  async validateErrorByEnteringemailaddressOnly() {
-    await this.locatoremailAddress.fill(LoginData.login.emailaddress);
-    await this.locatorcontinueButton.click();
-    await expect(this.locatorpassword).toHaveJSProperty(
+  async validateErrorEmailOnly() {
+    await this.emailAddressLocator.fill(LoginData.login.emailaddress);
+    await this.continueButtonLocator.click();
+    await expect(this.passwordLocator).toHaveJSProperty(
       "validationMessage",
       "Please fill in this field."
     );
   }
 
-  async validateErrorByEnteringPasswordOnly() {
-    await this.locatorpassword.fill(LoginData.login.password);
-    await this.locatorcontinueButton.click();
-    await expect(this.locatoremailAddress).toHaveJSProperty(
+  async validateErrorPasswordOnly() {
+    await this.passwordLocator.fill(LoginData.login.password);
+    await this.continueButtonLocator.click();
+    await expect(this.emailAddressLocator).toHaveJSProperty(
       "validationMessage",
       "Please fill in this field."
     );

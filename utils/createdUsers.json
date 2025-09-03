@@ -83,5 +83,35 @@
     "fakeEmail": "Reuben_Volkman@gmail.com",
     "fakePassword": "Shivam@1234",
     "createdAt": "2025-08-19T13:45:01.490Z"
+  },
+  {
+    "fakeEmail": "Erin60@yahoo.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-08-26T20:52:41.038Z"
+  },
+  {
+    "fakeEmail": "Janick18@hotmail.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-08-26T20:52:53.183Z"
+  },
+  {
+    "fakeEmail": "Winnifred10@gmail.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-09-03T19:21:18.319Z"
+  },
+  {
+    "fakeEmail": "Sid_Gibson@hotmail.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-09-03T19:21:36.627Z"
+  },
+  {
+    "fakeEmail": "Elisa85@gmail.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-09-03T21:08:30.846Z"
+  },
+  {
+    "fakeEmail": "Forrest20@hotmail.com",
+    "fakePassword": "Shivam@1234",
+    "createdAt": "2025-09-03T21:08:49.997Z"
   }
 ]
