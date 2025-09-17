@@ -1,31 +1,44 @@
 import { Locator, Page, expect } from "@playwright/test";
 import * as dotenv from "dotenv";
-import { LoginData } from "../utils/LoginData";
-import { BasePage } from "./BasePage";
-
+import { BasePage } from "../BasePage";
 dotenv.config();
 
-export class LoginPage extends BasePage {
-  readonly baseUrl: any;
-  constructor(page: Page) {
-    super(page)
-    this.baseUrl = process.env.BASE_URL;
-  }
+// Storing configurations for https://auth.honeyhive.ai/u/login
 
+export class LoginPage extends BasePage {
+  constructor(
+      readonly page: Page,
+      readonly baseUrl: string = process.env.BASE_URL ?? '',
+      readonly emailaddress: any | undefined = process.env.EMAIL_ADDRESS,
+      readonly password: any | undefined = process.env.PASSWORD
+    ) 
+    {
+    super(page)
+    }
+
+  /**
+   * Navigating to login page
+   */
   async goToLogin() {
     await this.page.goto(this.baseUrl);
   }
 
+  /**
+   * Logging in to platform with valid credentials
+   */
   async loginWithValidCreds() {
-    await this.emailAddressLocator.fill(LoginData.login.emailaddress);
-    await this.passwordLocator.fill(LoginData.login.password);
+    await this.emailAddressLocator.fill(this.emailaddress);
+    await this.passwordLocator.fill(this.password);
     await this.continueButtonLocator.click();
     await this.page.waitForLoadState('load')
-    await expect(
+    await expect.soft(
       this.page.getByRole("heading", { name: "Projects" })
     ).toBeVisible();
   }
 
+  /**
+   * Directly clicking on continue button w/o email and p/w
+   */
   async validateErrorOnSubmit() {
     await this.continueButtonLocator.click();
     await expect(this.emailAddressLocator).toHaveJSProperty(
@@ -34,8 +47,11 @@ export class LoginPage extends BasePage {
     );
   }
 
+  /**
+   * Checking error validation on email field
+   */
   async validateErrorEmailOnly() {
-    await this.emailAddressLocator.fill(LoginData.login.emailaddress);
+    await this.emailAddressLocator.fill(this.emailaddress);
     await this.continueButtonLocator.click();
     await expect(this.passwordLocator).toHaveJSProperty(
       "validationMessage",
@@ -43,8 +59,11 @@ export class LoginPage extends BasePage {
     );
   }
 
+  /**
+   * Checking error validation on password field
+   */
   async validateErrorPasswordOnly() {
-    await this.passwordLocator.fill(LoginData.login.password);
+    await this.passwordLocator.fill(this.password);
     await this.continueButtonLocator.click();
     await expect(this.emailAddressLocator).toHaveJSProperty(
       "validationMessage",

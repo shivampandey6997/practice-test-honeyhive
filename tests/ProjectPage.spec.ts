@@ -18,4 +18,19 @@ test.describe('Project Page Scripts',()=>{
         await atProjectPage.copyProjectIdOfProject()
     })
 
+    test('TC_04 Creating a Project without name', async({atLoginPage, atProjectPage}) =>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage. createProjectWithoutProjectName()
+    })
+
+    test('TC_05 Creating a Project with special characters in name', async({atLoginPage, atProjectPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.createProjectWithSpecialChars()
+    })
+
+    test('TC_06 Creating a Duplicate Project', async({atLoginPage, atProjectPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.createDuplicateProject()
+    })
+
 })

@@ -1,44 +1,42 @@
 import { Locator, Page, expect } from "@playwright/test";
 import * as dotenv from "dotenv";
 import { faker } from "@faker-js/faker"
-import fs from "fs";
-import path from "path";
-import { BasePage } from "./BasePage";
-import { LoginData } from "../utils/LoginData";
+import { BasePage } from "../BasePage";
 dotenv.config();
 
-export class SignupOnboarding extends BasePage {
-    readonly signupLocator:Locator
-    readonly baseUrl: any;
-    readonly firstNameLocator: Locator
-    readonly lastNameLocator: Locator
-    readonly yourTeamLocator: Locator
-    readonly organizationNameLocator: Locator
-    readonly personalAccountCheckboxLocator: Locator
-    readonly employeeCountLocator: Locator
-    readonly projectNameLocator: Locator
-    readonly agreeToTermsLocator: Locator
-    readonly continueButtonSignUpLocator: Locator
-    constructor(page: Page) {
-        super(page)
-        this.signupLocator = page.getByRole('link', { name: 'Sign up' })
-        this.baseUrl = process.env.BASE_URL;
-        this.firstNameLocator = page.locator("input[name='firstName']")
-        this.lastNameLocator = page.locator("input[name='lastName']")
-        this.yourTeamLocator = page.locator("select[name='team']")
-        this.organizationNameLocator = page.locator("input[name='orgName']")
-        this.personalAccountCheckboxLocator = page.locator('.inline-flex.items-center.text-xs.text-neutral-600 input[type="checkbox"]')
-        this.employeeCountLocator = page.locator("select[name='employeeCount']")
-        this.projectNameLocator = page.locator("input[name='firstProjectName']")
-        this.agreeToTermsLocator = page.locator("input[name='agreedToTerms']")
-        this.continueButtonSignUpLocator = page.locator("button[type='submit']")
-    }
+// Storing configuration for https://auth.honeyhive.ai/u/signup?state=hKFo2SB1WFhReElpR2 
 
+export class SignupOnboarding extends BasePage {
+    constructor(
+        readonly page: Page,
+        readonly signupLocator:Locator = page.getByRole('link', { name: 'Sign up' }),
+        readonly baseUrl= process.env.BASE_URL,
+        readonly emailaddress: string = process.env.EMAIL_ADDRESS ?? '',
+        readonly password: string = process.env.PASSWORD ?? '',
+        readonly firstNameLocator: Locator = page.locator("input[name='firstName']"),
+        readonly lastNameLocator: Locator = page.locator("input[name='lastName']"),
+        readonly yourTeamLocator: Locator = page.locator("select[name='team']"),
+        readonly organizationNameLocator: Locator = page.locator("input[name='orgName']"),
+        readonly personalAccountCheckboxLocator: Locator = page.locator('.inline-flex.items-center.text-xs.text-neutral-600 input[type="checkbox"]'),
+        readonly employeeCountLocator: Locator = page.locator("select[name='employeeCount']"),
+        readonly projectNameLocator: Locator = page.locator("input[name='firstProjectName']"),
+        readonly agreeToTermsLocator: Locator = page.locator("input[name='agreedToTerms']"),
+        readonly continueButtonSignUpLocator: Locator = page.locator("button[type='submit']")
+    )   {
+        super(page)
+        }
+
+    /**
+     * Verifying sign up page is accessible
+     */
     async openSignupAndVerify() {
         await this.signupLocator.click()
         expect.soft(this.page.url()).toMatch(/.*signup.*/)
     }
     
+    /**
+     * Clicking on continue button at Sign up page w/o email and password filled
+     */
     async continueWithoutCredentials() {
         await this.signupLocator.click()
         await this.continueButtonLocator.click()
@@ -46,20 +44,29 @@ export class SignupOnboarding extends BasePage {
       "Please fill in this field.")
     }
 
+    /**
+     * Verifying logging with email field only
+     */
     async continueWithEmailOnly() {
         await this.signupLocator.click()
-        await this.emailAddressLocator.fill(LoginData.login.emailaddress)
+        await this.emailAddressLocator.fill(this.emailaddress)
         await this.continueButtonLocator.click()
         await expect.soft(this.passwordLocator).toHaveJSProperty("validationMessage", "Please fill in this field.")
     }
-
+    
+    /**
+     * Verifying logging with password only
+     */
     async continueWithPasswordOnly() {
         await this.signupLocator.click()
-        await this.passwordLocator.fill(LoginData.login.password)
+        await this.passwordLocator.fill(this.password)
         await this.continueButtonLocator.click()
         await expect.soft(this.emailAddressLocator).toHaveJSProperty('validationMessage', "Please fill in this field.")
     }
 
+    /**
+     * Verifying validations on Onboarding page
+     */
     async validateOnboardingFields() {
         await this.creatingNewUser()
         await this.page.waitForLoadState('load')
@@ -86,40 +93,36 @@ export class SignupOnboarding extends BasePage {
         this.page.getByText('Please fix the validation errors before continuing.')
     }
 
+    /**
+     * Creating a new user through sign up page
+     */
     async creatingNewUser() {
       await this.openSignupAndVerify()
       const fakeEmail = faker.internet.email();
       const fakePassword = "Shivam@1234";
       await this.emailAddressLocator.fill(fakeEmail)
       await this.passwordLocator.fill(fakePassword)
-      await this.continueButtonLocator.click()
-      const filePath = path.join(__dirname, "../utils/createdUsers.json");
-      let existing: any[] = []
-      if (fs.existsSync(filePath)) {
-      existing = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        }
-        existing.push({
-        fakeEmail,
-        fakePassword,
-        createdAt: new Date().toISOString(),
-    });
-       fs.writeFileSync(filePath, JSON.stringify(existing, null, 2));  
-       await this.page.waitForLoadState('domcontentloaded');
-       expect.soft(this.page.url()).toMatch(/.*dashboard.*/)
+      await this.continueButtonLocator.click() 
+      await this.page.waitForLoadState('domcontentloaded');
+      expect.soft(this.page.url()).toMatch(/.*dashboard.*/)
     }
 
+    /**
+     * Completing Onboarding by filling all details
+     */
     async completeOnboarding() {
        await this.page.waitForLoadState('load'); 
+       const cname = 'Automation'
        await this.firstNameLocator.fill(faker.person.firstName())
        await this.lastNameLocator.fill(faker.person.lastName())
        await this.yourTeamLocator.selectOption('Engineering')
-       await this.organizationNameLocator.fill(faker.company.name())
+       await this.organizationNameLocator.fill("Autoamtion" + faker.string.alpha({ length: 10 }))
        await this.employeeCountLocator.selectOption('3-10')
-       await this.projectNameLocator.fill(faker.commerce.productName())
+       await this.projectNameLocator.fill("Automation" + faker.string.alpha({ length: 10 }))
        await this.agreeToTermsLocator.check()
        await this.continueButtonSignUpLocator.click()
        await this.page.waitForTimeout(4000)
-
+       await this.page.pause() 
     }
 
     
