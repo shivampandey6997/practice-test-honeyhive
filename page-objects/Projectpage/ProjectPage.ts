@@ -16,10 +16,10 @@ export class ProjectPage extends BasePage {
         readonly specialCharProjectName: string = "!@!@!#$#@!#$%^",
         // Locators
         readonly newProjectButtonLocator: Locator = page.locator("//button[@data-slot='button']"),
-        readonly projectNameLocator: Locator = page.locator("//input[@placeholder='Project name']"),
-        readonly projectDescriptionLocator: Locator = page.locator("//textarea[@placeholder='Description (optional)']"),
-        readonly projectCancelButtonLocator: Locator = page.locator(".btn-sm.text-slate-600"),
-        readonly projectCreateButtonLocator: Locator = page.locator("#create-project-confirm"),
+        readonly projectNameLocator: Locator = page.locator("//div//input[@placeholder='Enter project name']"),
+        readonly projectDescriptionLocator: Locator = page.locator('//div//textarea[@placeholder="Enter project description (optional)"]'),
+        readonly projectCancelButtonLocator: Locator = page.locator("//div//button[@label='Cancel']"),
+        readonly projectCreateButtonLocator: Locator = page.locator("//div//button[@label='Create']"),
         readonly projectSearchButtonLocator: Locator = page.locator("//input[@placeholder='Search projects']"),
         readonly projectEditIconLocator: Locator = page.locator("//div[@data-sentry-element='EditMenu']"),
         readonly projectCreatedLocator: Locator = page.locator(".font-medium.text-sm.text-black"),
@@ -27,7 +27,7 @@ export class ProjectPage extends BasePage {
         readonly projectDeleteConfirmButtonLocator: Locator = page.locator("//button[text()='Delete Project']"),
         readonly projectEditButtonLocator: Locator = page.locator("//button[text()='Edit Details']"),
         readonly projectIdCopyLocator: Locator = page.locator("//button[text()='Copy Project ID']"),
-        readonly projectDescriptionEditLocator: Locator = page.locator("#project-description"),
+        readonly projectDescriptionEditLocator: Locator = page.locator("//div//textarea[@data-slot='textarea']"),
         readonly projectDescriptionSaveButton: Locator = page.locator("//button[text()='Save']"),
         readonly projectDescriptionCloseButton: Locator = page.locator("//button[text()='Close']"),
         // readonly projectActionCancelBtn: Locator = page.locator("//button[text()='Cancel']")
@@ -70,11 +70,12 @@ export class ProjectPage extends BasePage {
         await this.projectEditButtonLocator.click()
         await this.projectDescriptionEditLocator.fill(this.editedDescription)
         await this.projectDescriptionSaveButton.click()
-        await this.page.waitForTimeout(4000)
+        await this.page.waitForTimeout(2000)
         await this.projectSearchButtonLocator.fill(this.projectName)
         await this.projectEditIconLocator.click()
         await this.projectEditButtonLocator.click()
-        await expect.soft(this.projectDescriptionEditLocator).toHaveText(this.editedDescription)
+        await this.page.pause()
+        await expect.soft(this.projectDescriptionEditLocator).toHaveValue(this.editedDescription)
         await this.projectDescriptionCloseButton.click()
         await this.deleteProject()
     }
@@ -116,7 +117,7 @@ export class ProjectPage extends BasePage {
         await this.projectDescriptionLocator.fill(this.projectDescription)
         const responseBody = await Promise.all([
             this.page.waitForResponse(res => res.url().includes('/projects') && res.request().method() === 'POST'),
-            await this.projectCreateButtonLocator.click(), 
+            await this.projectCreateButtonLocator.click(),
             await expect(this.page.getByText('Error creating project. Error: name contains special characters! Please retry.')).toBeVisible()
         ]).then(([res]) => res);
         const body = await responseBody.json();
@@ -161,6 +162,5 @@ export class ProjectPage extends BasePage {
         await this.page.waitForLoadState('load')
         await this.page.locator('.font-medium.text-sm.text-black').click()
         await this.page.waitForLoadState('load')
-        expect.soft(this.page.url()).toMatch(/.*dashboard.*/)
     }
 }

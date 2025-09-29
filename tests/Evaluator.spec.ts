@@ -15,7 +15,7 @@ test.describe('Evaluator scripts',()=>{
         await atEvaluatorPage.humanEvaluatorVisible()
     })
 
-    test('Verify Python, LLM,, Human & Composite Evaluator tab are visible on Evaluator page', async({atLoginPage, atProjectPage, atEvaluatorPage})=>{
+    test('Verify Python, LLM, Human & Composite Evaluator tab are visible on Evaluator page', async({atLoginPage, atProjectPage, atEvaluatorPage})=>{
         await atLoginPage.loginWithValidCreds()
         await atProjectPage.openingProject()
         await atEvaluatorPage.evaluatorSection()
@@ -66,9 +66,46 @@ test.describe('Evaluator scripts',()=>{
         await atEvaluatorPage.evalWithoutName()
     })
 
-    test('Verify that user is able to enable/disable a eval in production', async({atEvaluatorPage, atLoginPage, atProjectPage})=>{
+    test('Verify that eval created has a status of disabled in production', async({atEvaluatorPage, atLoginPage, atProjectPage})=>{
         await atLoginPage.loginWithValidCreds()
         await atProjectPage.openingProject()
         await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.eval_Disable()
+    })
+
+    test('Verify that eval created has a status of enabled in production at time of creation only', async({atEvaluatorPage,atLoginPage,atProjectPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.openingProject()
+        await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.eval_Enable()
+    })
+
+    test('Verify that two evaluators of same type can not be created', async({atEvaluatorPage, atProjectPage, atLoginPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.openingProject()
+        await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.creatingDuplicateMetric()
+    })
+
+    test('Verify that user is able to edit a evaluator and deploy it to Prodcution', async({atEvaluatorPage, atLoginPage, atProjectPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.openingProject()
+        await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.editingCreatedEval()
+    })
+
+    test('Verifying visibility of Commit button in Deploy Window', async({atLoginPage, atProjectPage, atEvaluatorPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.openingProject()
+        await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.checkingForCommitButton()
+    })
+
+    test('Verify that user is able to create a Categorcial return type human evaluator', async({atEvaluatorPage, atLoginPage, atProjectPage})=>{
+        await atLoginPage.loginWithValidCreds()
+        await atProjectPage.openingProject()
+        await atEvaluatorPage.evaluatorSection()
+        await atEvaluatorPage.creatingCategoricalHumanEvaluator()
+        await atEvaluatorPage.deletingMetric()
     })
 })

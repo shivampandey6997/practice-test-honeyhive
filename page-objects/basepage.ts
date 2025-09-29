@@ -9,6 +9,8 @@ export class BasePage {
       "//button[@data-action-button-primary='true']"
     ),
     readonly allProjectsLocator: Locator = page.locator('#sidebar-projects'),
-    readonly evaluatorSectionLocator: Locator = page.locator("#sidebar-evaluators")
+    readonly evaluatorSectionLocator: Locator = page.locator("#sidebar-evaluators"),
+    readonly datasetsSectionLocator: Locator = page.locator("//a[@href='/datasets']")
+    //getByRole('link', { name: 'Datasets (Grey) Datasets' })
 ) {}
 }

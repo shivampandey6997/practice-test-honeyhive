@@ -3,12 +3,14 @@ import { LoginPage } from '../page-objects/Loginpage/LoginPage'
 import { SignupOnboarding } from '../page-objects/SignupandOnboarding/SignupOnboardingPage'
 import { ProjectPage } from '../page-objects/Projectpage/ProjectPage'
 import { EvaluatorPage } from '../page-objects/Evaluatorpage/EvaluatorPage'
+import { DatasetPage } from '../page-objects/Datasetpage/DatasetPage'
 
 type pageFixture = {
     atLoginPage: LoginPage
     atSignupPage: SignupOnboarding
     atProjectPage: ProjectPage
     atEvaluatorPage: EvaluatorPage
+    atDatasetPage: DatasetPage
 }
 
 export const test = base.extend<pageFixture>({
@@ -32,5 +34,10 @@ export const test = base.extend<pageFixture>({
     atEvaluatorPage: async ({page}, use) => {
         const evaluatorpage = new EvaluatorPage(page)
         await use(evaluatorpage)
+    },
+    // DatasetPage fixture
+    atDatasetPage: async ({page}, use)=>{
+        const datasetpage = new DatasetPage(page)
+        await use(datasetpage)
     }
 })
