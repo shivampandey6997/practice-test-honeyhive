@@ -69,7 +69,6 @@ export class SignupOnboarding extends BasePage {
      */
     async validateOnboardingFields() {
         await this.creatingNewUser()
-        await this.page.waitForLoadState('load')
         await this.continueButtonSignUpLocator.click()
         await expect.soft(this.firstNameLocator).toHaveJSProperty('validationMessage', "Please fill in this field.")
         await this.firstNameLocator.fill(faker.person.firstName())
@@ -103,8 +102,8 @@ export class SignupOnboarding extends BasePage {
       await this.emailAddressLocator.fill(fakeEmail)
       await this.passwordLocator.fill(fakePassword)
       await this.continueButtonLocator.click() 
-      await this.page.waitForLoadState('domcontentloaded');
-      expect.soft(this.page.url()).toMatch(/.*dashboard.*/)
+      await this.page.waitForLoadState('load');
+      await expect.soft(this.page).toHaveURL(/onboarding/)
     }
 
     /**
@@ -116,14 +115,11 @@ export class SignupOnboarding extends BasePage {
        await this.firstNameLocator.fill(faker.person.firstName())
        await this.lastNameLocator.fill(faker.person.lastName())
        await this.yourTeamLocator.selectOption('Engineering')
-       await this.organizationNameLocator.fill("Autoamtion" + faker.string.alpha({ length: 10 }))
+       await this.organizationNameLocator.fill(cname + faker.string.alpha({ length: 10 }))
        await this.employeeCountLocator.selectOption('3-10')
-       await this.projectNameLocator.fill("Automation" + faker.string.alpha({ length: 10 }))
+       await this.projectNameLocator.fill(cname + faker.string.alpha({ length: 10 }))
        await this.agreeToTermsLocator.check()
        await this.continueButtonSignUpLocator.click()
-       await this.page.waitForTimeout(4000)
-       await this.page.pause() 
-    }
-
-    
+       await this.page.waitForTimeout(2000)
+    }    
 }

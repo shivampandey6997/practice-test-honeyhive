@@ -40,26 +40,26 @@ export class EvaluatorPage extends BasePage{
         readonly customCompositeEvaluator: Locator = page.locator("//div//h4[text()='Composite Metric']"),
         readonly createMetricButton: Locator = page.locator("//span[text()='Create']"),
         readonly metricName: Locator = page.locator("#new-metric-name"),
-        readonly metricDescription = page.locator("#new-metric-description"),
-        readonly metricEvalCriteria = page.locator("#criteria"),
-        readonly setupWindowOfEval = page.locator("#tab-configuration"),
-        readonly consoleWindowOfEval = page.locator("#tab-editor"),
-        readonly evaluatorTemplateDropdown = page.locator("//button[@name='metric-template']"),
-        readonly responseLengthPythonTemplate = page.locator("//li[@data-name='metric-template-item-Response Length']"),
-        readonly summaryFaithfulnessLLMTemplate = page.locator('//li[@data-name="metric-template-item-Summary Faithfulness"]'),
-        readonly answerFaithfulnessLLMTemplate = page.locator('//li[@data-name="metric-template-item-Answer Faithfulness"]'),  
-        readonly backButton = page.locator('//button//img[@alt="Back"]'),
-        readonly deleteMetric = page.locator("//img[@alt='Trash']"),
-        readonly conifrmMetricDelete = page.locator("//button[text()='Confirm']"),
-        readonly getAutomationEvalRow = page.locator("//tr[.//div[text()='AutomationEval']]"),
-        readonly compositeMinimumAggregateFunction = page.locator("//input[@id='minimum' and @type='radio']"),
-        readonly pythonEvalsInComposite = page.locator("//img[@alt='Python Evaluators']"),
-        readonly llmEvalsInComposite = page.locator("//img[@alt='LLM Evaluators']"),
-        readonly checkboxInCompositeEval = page.locator("#checkbox"),
-        readonly disabledStatusOfEvaluator = page.locator("//div[@class='text-left']//span[@class='text-xs font-medium bg-red-100 text-red-700 rounded-full px-2.5 py-1']"),
-        readonly enabledStatusOfEvaluator = page.locator("//div[@class='text-left']//span[@class='text-xs font-medium bg-green-100 text-emerald-600 rounded-full px-2.5 py-1']"), 
-        readonly enableInProdButton = page.locator("//label[@for='enable-in-prod']"),
-        readonly commitButton = page.locator("//span[@class='hidden xs:block' and text()='Commit']"),
+        readonly metricDescription: Locator = page.locator("#new-metric-description"),
+        readonly metricEvalCriteria: Locator = page.locator("#criteria"),
+        readonly setupWindowOfEval: Locator = page.locator("#tab-configuration"),
+        readonly consoleWindowOfEval: Locator = page.locator("#tab-editor"),
+        readonly evaluatorTemplateDropdown: Locator = page.locator("//button[@name='metric-template']"),
+        readonly responseLengthPythonTemplate: Locator = page.locator("//li[@data-name='metric-template-item-Response Length']"),
+        readonly summaryFaithfulnessLLMTemplate: Locator = page.locator('//li[@data-name="metric-template-item-Summary Faithfulness"]'),
+        readonly answerFaithfulnessLLMTemplate: Locator = page.locator('//li[@data-name="metric-template-item-Answer Faithfulness"]'),  
+        readonly backButton: Locator = page.locator('//button//img[@alt="Back"]'),
+        readonly deleteMetric: Locator = page.locator("//img[@alt='Trash']"),
+        readonly conifrmMetricDelete: Locator = page.locator("//button[text()='Confirm']"),
+        readonly getAutomationEvalRow: Locator = page.locator("//tr[.//div[text()='AutomationEval']]"),
+        readonly compositeMinimumAggregateFunction: Locator = page.locator("//input[@id='minimum' and @type='radio']"),
+        readonly pythonEvalsInComposite: Locator = page.locator("//img[@alt='Python Evaluators']"),
+        readonly llmEvalsInComposite: Locator = page.locator("//img[@alt='LLM Evaluators']"),
+        readonly checkboxInCompositeEval: Locator = page.locator("#checkbox"),
+        readonly disabledStatusOfEvaluator: Locator = page.locator("//div[@class='text-left']//span[@class='text-xs font-medium bg-red-100 text-red-700 rounded-full px-2.5 py-1']"),
+        readonly enabledStatusOfEvaluator: Locator = page.locator("//div[@class='text-left']//span[@class='text-xs font-medium bg-green-100 text-emerald-600 rounded-full px-2.5 py-1']"), 
+        readonly enableInProdButton: Locator = page.locator("//label[@for='enable-in-prod']"),
+        readonly commitButton: Locator = page.locator("//span[@class='hidden xs:block' and text()='Commit']"),
         readonly commitMessageTextArea: Locator = page.locator("//div//textarea[@placeholder='Enter commit message']"),
         readonly deployThisVersionCheckbox: Locator = page.locator("#deployThisVersion"),
         readonly commitAndDeployButton: Locator = page.locator("//button//span[text()='Commit and Deploy']"),
@@ -79,7 +79,7 @@ export class EvaluatorPage extends BasePage{
      */
     async evaluatorSection(){
         await this.evaluatorSectionLocator.click()
-        await this.page.waitForTimeout(2000)
+        // await this.page.waitForTimeout(2000)
         await expect.soft(this.page).toHaveURL(/.*metrics.*/)
     }
 
@@ -126,10 +126,23 @@ export class EvaluatorPage extends BasePage{
         await this.setupWindowOfEval.click()
         await this.metricName.fill(this.dummyEvalName)
         await this.metricDescription.fill(this.dummyEvalDescription)
-        await Promise.all([this.checkEvalSuccessResponse(), this.createMetricButton.click()])
+        // await this.checkEvalSuccessResponse()
+        // const [response] = await Promise.all([
+        // this.page.waitForResponse(resp =>
+        // resp.url().includes('/api/protected/metrics') && resp.request().method() === 'POST'
+        // ),
+        // this.createMetricButton.click({ delay: 200 })
+        // ]);
+
+        // console.log('eval POST status:', response.status(), 'body:', await response.text());
+        // expect(response.status()).toBeLessThan(300)
+        // await this.createMetricButton.click()
+        // await this.page.reload()
+        await Promise.all([this.checkEvalSuccessResponse(), this.createMetricButton.click({delay:200})])
         await expect.soft(this.page.getByText(this.evalCreatedSuccess)).toBeVisible()
         await expect.soft(this.metricCreatedIcon).toBeVisible()
-        await this.backButton.click()
+        // await this.backButton.click()
+        await this.page.pause()
     }
     
     /**
@@ -148,6 +161,7 @@ export class EvaluatorPage extends BasePage{
         await this.metricDescription.fill(this.dummyEvalDescription)
         await Promise.all([this.checkEvalSuccessResponse(), this.createMetricButton.click()])
         await expect.soft(this.page.getByText(this.evalCreatedSuccess)).toBeVisible()
+        await this.page.waitForTimeout(6000)
         await expect.soft(this.metricCreatedIcon).toBeVisible()
         await this.backButton.click()
     }
@@ -284,8 +298,17 @@ export class EvaluatorPage extends BasePage{
      * Check for API success response for a eval created
      */
     async checkEvalSuccessResponse(){
-        const response = await this.page.waitForResponse(resp => resp.url().includes('/api/protected/metrics') && resp.request().method() === 'POST')
-        expect.soft(response.ok()).toBeTruthy()
+        // const response = await this.page.waitForResponse(resp => resp.url().includes('/api/protected/metrics') && resp.request().method() === 'POST')
+        // expect(response.ok()).toBeTruthy()
+        const [response] = await Promise.all([
+        this.page.waitForResponse(resp =>
+        resp.url().includes('/api/protected/metrics') && resp.request().method() === 'POST'
+        ),
+        this.createMetricButton.click({ delay: 200 })
+        ]);
+
+        console.log('eval POST status:', response.status(), 'body:', await response.text());
+        expect(response.status()).toBeLessThan(300)
     }
 
     /**
@@ -293,7 +316,7 @@ export class EvaluatorPage extends BasePage{
      */
     async checkEvalDeleteResponse(){
         const response = await this.page.waitForResponse(resp => resp.url().includes('api/protected') && resp.request().method() === 'DELETE')
-        expect.soft(response.ok()).toBeTruthy()
+        expect(response.ok()).toBeTruthy()
     }
 
     /**
@@ -360,6 +383,7 @@ export class EvaluatorPage extends BasePage{
         await this.categoryPreDefValue2.fill(this.categoryValue2)
         await this.categoryPreDefValue3.fill(this.categoryValue3)
         await Promise.all([this.checkEvalSuccessResponse(), this.createMetricButton.click()])
+        await this.page.pause()
         await expect.soft(this.page.getByText(this.evalCreatedSuccess)).toBeVisible()
         await expect.soft(this.metricCreatedIcon).toBeVisible()
         await this.backButton.click()

@@ -18,9 +18,9 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 1,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html', 
   /* Default timeout for each test */
@@ -35,7 +35,7 @@ export default defineConfig({
     // video: 'on',
     launchOptions: {
      slowMo:500,
-    //  args: ["--start-maximized"]
+    // args: ["--start-maximized"]
     },
   },
 
@@ -43,7 +43,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], headless: false, viewport:{width : 1792 , height : 1120}},
+      use: { ...devices['Desktop Chrome'], headless: false, viewport:{width : 1792 , height : 1120}}
     },
 
     // {

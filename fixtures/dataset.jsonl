@@ -1,0 +1,30 @@
+{"id": 1, "text": "Hello world!", "label": "greeting"}
+{"id": 2, "text": "How are you?", "label": "question"}
+{"id": 3, "text": "Goodbye!", "label": "farewell"}
+{"id": 4, "text": "What's your name?", "label": "question"}
+{"id": 5, "text": "Nice to meet you.", "label": "greeting"}
+{"id": 6, "text": "See you later.", "label": "farewell"}
+{"id": 7, "text": "Can you help me?", "label": "request"}
+{"id": 8, "text": "Thank you!", "label": "gratitude"}
+{"id": 9, "text": "Sorry, I missed that.", "label": "apology"}
+{"id": 10, "text": "What's the time?", "label": "question"}
+{"id": 11, "text": "I love pizza.", "label": "statement"}
+{"id": 12, "text": "Let's start the meeting.", "label": "action"}
+{"id": 13, "text": "Who won the game?", "label": "question"}
+{"id": 14, "text": "Today is a sunny day.", "label": "statement"}
+{"id": 15, "text": "Could you repeat that?", "label": "request"}
+{"id": 16, "text": "See you tomorrow.", "label": "farewell"}
+{"id": 17, "text": "My favorite color is blue.", "label": "statement"}
+{"id": 18, "text": "What is your favorite food?", "label": "question"}
+{"id": 19, "text": "It's raining outside.", "label": "statement"}
+{"id": 20, "text": "Do you know Python?", "label": "question"}
+{"id": 21, "text": "Happy Birthday!", "label": "greeting"}
+{"id": 22, "text": "Please open the window.", "label": "request"}
+{"id": 23, "text": "Congratulations!", "label": "greeting"}
+{"id": 24, "text": "Let's grab some coffee.", "label": "action"}
+{"id": 25, "text": "I don't understand.", "label": "statement"}
+{"id": 26, "text": "Where are you from?", "label": "question"}
+{"id": 27, "text": "Welcome back!", "label": "greeting"}
+{"id": 28, "text": "I'm not sure about that.", "label": "statement"}
+{"id": 29, "text": "Take care!", "label": "farewell"}
+{"id": 30, "text": "Would you like some tea?", "label": "question"}
